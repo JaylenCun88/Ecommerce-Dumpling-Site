@@ -19,6 +19,8 @@ create table public.products (
 );
 
 alter table public.products enable row level security;
+grant usage on schema public to anon;
+grant select on table public.products to anon;
 create policy "Anyone can read active products" on public.products for select to anon using (is_active = true);
 
 insert into public.products (slug, name, region, country, price_cents, description, ingredients, package_size, dietary, tone, accent, shape, sort_order) values
