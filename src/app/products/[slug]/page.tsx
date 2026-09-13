@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { CartButton } from "@/components/cart-button";
 import { ProductArt } from "@/components/product-art";
@@ -7,6 +8,7 @@ import { formatPrice } from "@/lib/products";
 import { getStoreProduct } from "@/lib/product-repository";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+  await connection();
   const { slug } = await params;
   const product = await getStoreProduct(slug);
   if (!product) notFound();
