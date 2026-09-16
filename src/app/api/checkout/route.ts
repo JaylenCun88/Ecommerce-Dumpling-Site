@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getStoreProducts } from "@/lib/product-repository";
 import { stripe } from "@/lib/stripe";
+import { createClient } from "@/lib/supabase/server";
 
 type CheckoutItem = { slug: string; quantity: number };
 
@@ -22,10 +23,12 @@ export async function POST(request: Request) {
       return { price_data: { currency: "usd", product_data: { name: product.name, description: product.packageSize }, unit_amount: Math.round(product.price * 100) }, quantity: item.quantity };
     });
     const origin = new URL(request.url).origin;
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: lineItems,
-      metadata: { store: "morsel" },
+      metadata: { store: "morsel", ...(user ? { user_id: user.id } : {}) },
       shipping_address_collection: { allowed_countries: ["US"] },
       success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/cart`,

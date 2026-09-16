@@ -1,0 +1,3 @@
+import Link from "next/link";
+import { LoginForm } from "@/components/login-form";
+export default function Login() { return <main className="min-h-screen bg-[#fffdf8] px-6 py-6 text-[#273027]"><header className="mx-auto max-w-4xl"><Link href="/" className="text-xl font-semibold tracking-[-.06em]">morsel</Link></header><section className="mx-auto mt-20 max-w-md"><p className="text-xs font-medium uppercase tracking-[.2em] text-[#719064]">Your account</p><h1 className="mt-4 text-4xl tracking-[-.06em]">Welcome back.</h1><p className="mt-4 leading-7 text-[#586457]">Use your email to receive a secure sign-in link. No password needed.</p><LoginForm /></section></main>; }

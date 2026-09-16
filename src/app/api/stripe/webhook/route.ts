@@ -42,6 +42,7 @@ export async function POST(request: Request) {
     const { data: order, error: orderError } = await admin.from("orders").insert({
       stripe_checkout_session_id: session.id,
       stripe_payment_intent_id: typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent?.id ?? null,
+      user_id: session.metadata?.user_id ?? null,
       customer_email: session.customer_details.email,
       customer_name: session.customer_details.name,
       shipping_address: session.collected_information?.shipping_details?.address ?? null,

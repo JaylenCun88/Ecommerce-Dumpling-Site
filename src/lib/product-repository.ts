@@ -14,14 +14,16 @@ function toProduct(row: ProductRow): Product {
 
 export async function getStoreProducts() {
   if (!hasSupabaseConfig) return products;
-  const { data, error } = await createClient().from("products").select("*").eq("is_active", true).order("sort_order").returns<ProductRow[]>();
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("products").select("*").eq("is_active", true).order("sort_order").returns<ProductRow[]>();
   if (error) throw new Error(`Could not load products: ${error.message}`);
   return data.map(toProduct);
 }
 
 export async function getStoreProduct(slug: string) {
   if (!hasSupabaseConfig) return getProduct(slug);
-  const { data, error } = await createClient().from("products").select("*").eq("slug", slug).eq("is_active", true).maybeSingle<ProductRow>();
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("products").select("*").eq("slug", slug).eq("is_active", true).maybeSingle<ProductRow>();
   if (error) throw new Error(`Could not load product: ${error.message}`);
   return data ? toProduct(data) : undefined;
 }
