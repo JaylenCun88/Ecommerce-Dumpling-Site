@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Morsel
 
-## Getting Started
+Morsel is a learning-focused ecommerce storefront for dumpling traditions from around the world, built with Next.js, Supabase, and Stripe.
 
-First, run the development server:
+## Capabilities
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Product catalog, details, responsive cart, and optimized product images
+- Supabase Postgres, Auth, and Storage
+- Stripe Checkout with verified webhook order recording
+- Magic-link accounts, order history, and protected admin controls
+
+## Local setup
+
+1. Run `npm ci`.
+2. Copy `.env.example` to `.env.local` and set Supabase and Stripe values.
+3. Apply migrations through the project's Supabase workflow.
+4. Run `npm run dev`.
+
+For local payment tests, run:
+
+```powershell
+stripe listen --events checkout.session.completed --forward-to http://localhost:3000/api/stripe/webhook
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Quality checks
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Run the same gates GitHub Actions uses on pull requests and pushes to `main`:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```powershell
+npm run format:check
+npm run lint
+npm run build
+```
 
-## Learn More
+- Prettier enforces wrapping and layout (`npm run format` to apply it).
+- ESLint (`eslint-config-next`) catches unused code, React/Next issues, and TypeScript problems.
+- `next build` type-checks and compiles the App Router without talking to Supabase or Stripe.
 
-To learn more about Next.js, take a look at the following resources:
+This is CI only. Preview/production deploys stay with the host (typically Vercel for Next.js) until a dedicated CD workflow is added. After the first successful run, mark **Quality checks** as required in GitHub branch protection on `main`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Documentation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Backlog](./backlog.md)
+- [ADRs](./Docs/adr/README.md)
+- [Wiki starter](./Docs/wiki/Home.md)
