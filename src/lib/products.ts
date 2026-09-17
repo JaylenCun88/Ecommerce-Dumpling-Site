@@ -11,6 +11,7 @@ export type Product = {
   tone: string;
   accent: string;
   shape: "round" | "crescent" | "folded" | "pleated";
+  imageUrl?: string | null;
 };
 
 export const products: Product[] = [
