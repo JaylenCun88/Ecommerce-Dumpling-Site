@@ -3,4 +3,51 @@ import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { formatPrice } from "@/lib/products";
 import { createClient } from "@/lib/supabase/server";
-export default async function Account() { await connection(); const supabase = await createClient(); const { data: { user } } = await supabase.auth.getUser(); if (!user) redirect("/login"); const { data: orders } = await supabase.from("orders").select("id, amount_total, currency, status, created_at, order_items(product_name, quantity)").order("created_at", { ascending: false }); return <main className="min-h-screen bg-[#fffdf8] px-6 py-6 text-[#273027]"><header className="mx-auto max-w-4xl"><Link href="/" className="text-xl font-semibold tracking-[-.06em]">morsel</Link></header><section className="mx-auto mt-16 max-w-4xl"><p className="text-xs font-medium uppercase tracking-[.2em] text-[#719064]">Your account</p><h1 className="mt-4 text-4xl tracking-[-.06em]">Order history</h1><p className="mt-3 text-[#586457]">{user.email}</p><div className="mt-10 divide-y border-y border-[#d8ddd5]">{orders?.length ? orders.map((order) => <article key={order.id} className="py-5"><div className="flex justify-between"><p className="font-medium">Order #{order.id}</p><p>{formatPrice(order.amount_total / 100)}</p></div><p className="mt-2 text-sm text-[#687168]">{new Date(order.created_at).toLocaleDateString()} · {order.status}</p><p className="mt-2 text-sm text-[#586457]">{order.order_items.map((item) => `${item.product_name} × ${item.quantity}`).join(", ")}</p></article>) : <p className="py-8 text-[#586457]">No account-linked orders yet. Sign in before checkout and your future orders will appear here.</p>}</div></section></main>; }
+export default async function Account() {
+  await connection();
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+  const { data: orders } = await supabase
+    .from("orders")
+    .select("id, amount_total, currency, status, created_at, order_items(product_name, quantity)")
+    .order("created_at", { ascending: false });
+  return (
+    <main className="min-h-screen bg-[#fffdf8] px-6 py-6 text-[#273027]">
+      <header className="mx-auto max-w-4xl">
+        <Link href="/" className="text-xl font-semibold tracking-[-.06em]">
+          morsel
+        </Link>
+      </header>
+      <section className="mx-auto mt-16 max-w-4xl">
+        <p className="text-xs font-medium uppercase tracking-[.2em] text-[#719064]">Your account</p>
+        <h1 className="mt-4 text-4xl tracking-[-.06em]">Order history</h1>
+        <p className="mt-3 text-[#586457]">{user.email}</p>
+        <div className="mt-10 divide-y border-y border-[#d8ddd5]">
+          {orders?.length ? (
+            orders.map((order) => (
+              <article key={order.id} className="py-5">
+                <div className="flex justify-between">
+                  <p className="font-medium">Order #{order.id}</p>
+                  <p>{formatPrice(order.amount_total / 100)}</p>
+                </div>
+                <p className="mt-2 text-sm text-[#687168]">
+                  {new Date(order.created_at).toLocaleDateString()} · {order.status}
+                </p>
+                <p className="mt-2 text-sm text-[#586457]">
+                  {order.order_items.map((item) => `${item.product_name} × ${item.quantity}`).join(", ")}
+                </p>
+              </article>
+            ))
+          ) : (
+            <p className="py-8 text-[#586457]">
+              No account-linked orders yet. Sign in before checkout and your future orders will appear here.
+            </p>
+          )}
+        </div>
+      </section>
+    </main>
+  );
+}
