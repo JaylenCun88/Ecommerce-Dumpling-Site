@@ -1,13 +1,13 @@
 # Morsel
 
-Morsel is a learning-focused ecommerce storefront for dumpling traditions from around the world, built with Next.js, Supabase, and Stripe.
+Morsel is an ecommerce storefront for various dumplings from traditions all around the world, built with Next.js, Supabase, and integrated with Stripe.
 
 ## Capabilities
 
 - Product catalog, details, responsive cart, and optimized product images
 - Supabase Postgres, Auth, and Storage
 - Stripe Checkout with verified webhook order recording
-- Magic-link accounts, order history, and protected admin controls
+- Magic-link accounts for sign in, order history, and protected admin controls
 
 ## Local setup
 
@@ -37,6 +37,8 @@ npm run build
 - `next build` type-checks and compiles the App Router without talking to Supabase or Stripe.
 
 This is CI only. Preview/production deploys stay with the host (typically Vercel for Next.js) until a dedicated CD workflow is added. After the first successful run, mark **Quality checks** as required in GitHub branch protection on `main`.
+
+CI/CD Pipeline - Work in Progress (WIP)
 
 ## Documentation
 
